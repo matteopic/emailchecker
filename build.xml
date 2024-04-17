@@ -1,0 +1,61 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+
+<project default="jar" name="EmailCheckerProject">
+
+    <property name="progetto" value="EmailChecker" />
+    
+    <property name="base.dir" value="." />
+
+    <property name="classpath" value="${base.dir}/lib" />
+
+    <property name="src" value="${base.dir}/src" />
+    
+    <property name="dest" value="${basedir}/classes" />
+
+    <property name="dist" value="${basedir}/lib" />
+
+    <property name="list" value="" />     
+    
+	<!--  Create the build directory structure used by compile  -->
+    <target name="init">
+        <mkdir dir="${dest}" />
+    </target>
+
+	
+	<!--  Compila il codice da ${src} dentro ${dest} -->
+	<target name="compile" depends="init">
+        <javac 
+           destdir="${dest}" 
+           optimize="on"
+           deprecation="on"
+           debug="on" 
+           srcdir="${src}" 
+           includes="${list}"
+           failonerror="true">
+           
+          <classpath>
+            <fileset dir="${classpath}">
+              <include name="**/*.jar" />
+            </fileset>
+          </classpath>
+        </javac>
+    </target>
+
+	
+	<!--  Elimina la ${dest} e ${dist} directory.  -->
+    <target name="clean">
+        <delete dir="${dest}" />
+        <delete dir="${dist}/${progetto}.jar" />
+    </target>
+
+	
+	<!-- Crea la dirctory ${dist}, all'interno crea un file jar con i file contenuti in ${dest} -->
+	<target name="jar" depends="compile">
+        <mkdir dir="${dist}" />
+        <jar jarfile="${dist}/${progetto}.jar" basedir="${dest}" />
+    </target>
+
+    <!-- Cancella ${dest}, la ricrea e compila -->
+    <target name="rebuild" depends="clean, compile" />
+    
+</project>
